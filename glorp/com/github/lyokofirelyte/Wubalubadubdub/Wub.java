@@ -32,6 +32,7 @@ import com.github.lyokofirelyte.Wubalubadubdub.Data.WubData;
 import com.github.lyokofirelyte.Wubalubadubdub.Data.WubObject;
 import com.github.lyokofirelyte.Wubalubadubdub.Data.WubServerObject;
 import com.github.lyokofirelyte.Wubalubadubdub.Event.EventChat;
+import com.github.lyokofirelyte.Wubalubadubdub.Event.EventCook;
 import com.github.lyokofirelyte.Wubalubadubdub.Event.EventDamageTaken;
 import com.github.lyokofirelyte.Wubalubadubdub.Event.EventMine;
 import com.github.lyokofirelyte.Wubalubadubdub.Event.EventMobDeath;
@@ -100,7 +101,8 @@ public class Wub extends JavaPlugin implements Listener {
 			EventDamageTaken.class,
 			EventSignInteract.class,
 			EventMobDeath.class,
-			EventMine.class
+			EventMine.class,
+			EventCook.class
 		});
 		
 		clazzez.put(SystemRanks.class.getName().toString(), new SystemRanks(this));
@@ -130,7 +132,7 @@ public class Wub extends JavaPlugin implements Listener {
 			commands.add(clazz.getConstructor(Wub.class).newInstance(this));
 		}
 	}
-	
+
 	@SneakyThrows
 	private void load(){
 		

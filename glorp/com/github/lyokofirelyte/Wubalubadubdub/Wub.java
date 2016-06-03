@@ -33,6 +33,7 @@ import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandRanks;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandReload;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandSpawn;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandStaff;
+import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandStaffList;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandWub;
 import com.github.lyokofirelyte.Wubalubadubdub.Data.WubData;
 import com.github.lyokofirelyte.Wubalubadubdub.Data.WubObject;
@@ -94,7 +95,8 @@ public class Wub extends JavaPlugin implements Listener {
 			CommandStaff.class,
 			CommandWub.class,
 			CommandRanks.class,
-			CommandSpawn.class
+			CommandSpawn.class,
+			CommandStaffList.class
 		});
 		
 		registerListeners(new Class<?>[]{

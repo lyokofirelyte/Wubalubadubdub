@@ -23,12 +23,14 @@ public class EventChat implements Listener {
 	public void onChat(AsyncPlayerChatEvent e){
 		e.setCancelled(true);
 		Player p = e.getPlayer();
+		e.setMessage(ChatColor.stripColor(main.AS(e.getMessage())));
 		
 		SystemRanks sr = (SystemRanks) main.getInstance(SystemRanks.class);
 		String staffRank = WubData.STAFF_RANK.getData(p, main).asString();
-		String rankColor = sr.getRankColor(p);
-		String rank = staffRank + sr.getRank(p);
-		String message = rankColor + "\u1445 " + rank + " \u1440 &7" + e.getPlayer().getDisplayName() + " &7> &f" + ChatColor.stripColor(main.AS(e.getMessage()));
+		boolean official = staffRank.length() > 2 && e.getMessage().startsWith("@");
+		String rankColor = official ? "&b" : sr.getRankColor(p);
+		String rank = official ? staffRank : sr.getRank(p);
+		String message = rankColor + "\u1445 " + rank + " \u1440 &7" + e.getPlayer().getDisplayName() + " &7> &f" + main.AS((official ? "&b" + e.getMessage().substring(1) : e.getMessage()));
 		for (Player po : Bukkit.getOnlinePlayers()){
 			po.sendMessage(main.AS(message));
 		}

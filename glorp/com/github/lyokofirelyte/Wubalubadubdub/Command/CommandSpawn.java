@@ -17,12 +17,15 @@ public class CommandSpawn {
 		main = w;
 	}
 
-	@WubCommand(commands = {"spawn"}, help = "/spawn", desc = "Go to spawn!")
+	@WubCommand(commands = {"spawn", "s"}, help = "/spawn", desc = "Go to spawn!")
 	public void onSpawn(String[] args, Player p){
 		if(main.serverObject.get("spawn") != null) {
 			String[] spl = main.serverObject.get("spawn").toString().split(" ");
 			Location homeLoc = new Location(Bukkit.getWorld(spl[0]), toInt(spl[1]), toInt(spl[2]), toInt(spl[3]), toFloat(spl[4]), toFloat(spl[5]));
 			p.teleport(homeLoc);
+			main.sendMessage(p, "Teleported to spawn!");
+		} else {
+			main.sendMessage(p, "Spawn not set!");
 		}
 	}
 	
@@ -31,6 +34,9 @@ public class CommandSpawn {
 		if(p.isOp()) {
 			Location l = p.getLocation();
 			main.serverObject.put("spawn", l.getWorld().getName() + " " + l.getBlockX() + " " + (l.getBlockY() + 1) + " " + l.getBlockZ() + " " + l.getYaw() + " " + l.getPitch());
+			main.sendMessage(p, "Spawn has been set!");
+		} else {
+			main.sendMessage(p, "You don't have permission!");
 		}
 	}
 	

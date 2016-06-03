@@ -1,9 +1,13 @@
-package com.github.lyokofirelyte.Wubalubadubdub;
+package com.github.lyokofirelyte.Wubalubadubdub.Command;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+
+import com.github.lyokofirelyte.Wubalubadubdub.Wub;
+import com.github.lyokofirelyte.Wubalubadubdub.Data.WubCommand;
+import com.github.lyokofirelyte.Wubalubadubdub.Data.WubData;
 
 public class CommandHome implements Listener {
 	
@@ -13,7 +17,7 @@ public class CommandHome implements Listener {
 		main = w;
 	}
 
-	@WubCommand(commands = {"home"})
+	@WubCommand(commands = {"home"}, desc = "Return home command", help = "/home")
 	public void onHome(String[] args, Player p){
 		String home = WubData.HOMES.getData(p, main).asString();
 		if (!home.equals("none")){
@@ -30,7 +34,7 @@ public class CommandHome implements Listener {
 		}
 	}
 	
-	@WubCommand(commands = {"sethome"})
+	@WubCommand(commands = {"sethome"}, desc = "Set home command", help = "/sethome")
 	public void onSetHome(String[] args, Player p){
 		Location l = p.getLocation();
 		WubData.HOMES.setData(p, l.getWorld().getName() + " " + l.getBlockX() + " " + (l.getBlockY() + 1) + " " + l.getBlockZ() + " " + l.getYaw() + " " + l.getPitch(), main);
@@ -43,6 +47,5 @@ public class CommandHome implements Listener {
 	
 	private float toFloat(String i){
 		return Float.parseFloat(i);
-	}
-	
+	}	
 }

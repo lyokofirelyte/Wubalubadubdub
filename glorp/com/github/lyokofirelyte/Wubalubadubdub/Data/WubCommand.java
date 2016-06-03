@@ -1,4 +1,4 @@
-package com.github.lyokofirelyte.Wubalubadubdub;
+package com.github.lyokofirelyte.Wubalubadubdub.Data;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -10,7 +10,8 @@ import java.lang.annotation.Target;
 public @interface WubCommand {
 	String[] commands();
 	String perm() default "wub.lub";
-	String help() default "M-m-morty! Look at, at what you did! Yo-oo-u screw *burp* screwed it all up!";
+	String help() default "/command";
+	String desc() default "A wub command";
 	int maxArgs() default 99999;
 	int minArgs() default 0;
 }

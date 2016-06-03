@@ -1,4 +1,4 @@
-package com.github.lyokofirelyte.Wubalubadubdub;
+package com.github.lyokofirelyte.Wubalubadubdub.Command;
 
 import java.lang.reflect.Method;
 
@@ -8,6 +8,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+
+import com.github.lyokofirelyte.Wubalubadubdub.Wub;
+import com.github.lyokofirelyte.Wubalubadubdub.Data.WubCommand;
+import com.github.lyokofirelyte.Wubalubadubdub.Data.WubData;
 
 public class CommandDirector implements Listener {
 

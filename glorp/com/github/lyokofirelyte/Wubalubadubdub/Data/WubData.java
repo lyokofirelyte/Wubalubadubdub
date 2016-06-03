@@ -1,4 +1,4 @@
-package com.github.lyokofirelyte.Wubalubadubdub;
+package com.github.lyokofirelyte.Wubalubadubdub.Data;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,10 +6,18 @@ import java.util.List;
 import org.bukkit.entity.Player;
 import org.json.simple.JSONArray;
 
+import com.github.lyokofirelyte.Wubalubadubdub.Wub;
+
 public enum WubData {
 
+	GXP("GXP"),
+	RANK("RANK"),
 	HOMES("HOMES"),
-	PERMS("PERMS");
+	PERMS("PERMS"),
+	NAME("NAME"),
+	INVULN("INVULN"),
+	STAFF_RANK("STAFF_RANK"),
+	DISPLAY_NAME("DISPLAY_NAME");
 	
 	WubData(String name){
 		this.name = name;

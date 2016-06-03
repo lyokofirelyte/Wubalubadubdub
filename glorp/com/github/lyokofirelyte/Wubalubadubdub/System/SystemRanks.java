@@ -26,12 +26,49 @@ public class SystemRanks {
 		return WubRank.valueOf(getRank(p).toUpperCase()).getColor();
 	}
 	
+	public void checkForRankup(Player p){
+		int combat = WubData.GXP_MOB.getData(p, main).asInt();
+		int tree = WubData.GXP_TREE.getData(p, main).asInt();
+		int rock = WubData.GXP_ROCK.getData(p, main).asInt();
+		int sell = WubData.GXP_SELL.getData(p, main).asInt();
+		int cook = WubData.GXP_COOK.getData(p, main).asInt();
+		int gxp = WubData.GXP.getData(p, main).asInt();
+		int needed = WubData.GXP_NEEDED.getData(p, main).asInt();
+		if (WubData.RANK.getData(p, main).asInt() == 2){
+			//main.sendMessage(p, "&c&oYou can't go past this rank during the closed beta yet.");
+			WubData.GXP.setData(p, 0, main);
+			WubData.GXP_COOK.setData(p, 0, main);
+			WubData.GXP_TREE.setData(p, 0, main);
+			WubData.GXP_ROCK.setData(p, 0, main);
+			WubData.GXP_SELL.setData(p, 0, main);
+			WubData.GXP_MOB.setData(p, 0, main);
+		} else {
+			if (combat >= 100 && tree >= 100 && rock >= 100 /*&& sell >= 100 && cook >= 100*/){
+				WubData.GXP.setData(p, gxp + 100, main);
+				gxp = WubData.GXP.getData(p, main).asInt();
+				main.updateDisplayBar(p, "&b\u15D1 GXP: " + gxp + " &f/&b " + needed);
+				main.sendMessage(p, "&bYou have earned 100 GXP. Your collection limits have been reset for another cycle.");
+				if (gxp >= needed){
+					WubData.GXP.setData(p, 0, main);
+					WubData.GXP_COOK.setData(p, 0, main);
+					WubData.GXP_TREE.setData(p, 0, main);
+					WubData.GXP_ROCK.setData(p, 0, main);
+					WubData.GXP_SELL.setData(p, 0, main);
+					WubData.GXP_MOB.setData(p, 0, main);
+					WubData.GXP_NEEDED.setData(p, needed + 100, main);
+					rankUp(p);
+				}
+			}
+		}
+	}
+	
 	public void rankUp(Player p){
 		int currRank = WubData.RANK.getData(p, main).asInt();
 		if (currRank < WubData.values().length - 1){
-			
+			WubData.RANK.setData(p, currRank+1, main);
+			main.broadcast(p.getDisplayName() + " &2has ranked up to " + getRankWithColor(p) + "&2!");
 		} else {
-			main.sendMessage(p, "&c&oYou're already max rank.");
+			//main.sendMessage(p, "&c&oYou're already max rank.");
 		}
 	}
 	

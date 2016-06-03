@@ -10,6 +10,7 @@ import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.craftbukkit.v1_9_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -23,6 +24,7 @@ import org.json.simple.parser.JSONParser;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandDirector;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandHome;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandNick;
+import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandRanks;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandReload;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandStaff;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandWub;
@@ -31,10 +33,15 @@ import com.github.lyokofirelyte.Wubalubadubdub.Data.WubObject;
 import com.github.lyokofirelyte.Wubalubadubdub.Data.WubServerObject;
 import com.github.lyokofirelyte.Wubalubadubdub.Event.EventChat;
 import com.github.lyokofirelyte.Wubalubadubdub.Event.EventDamageTaken;
+import com.github.lyokofirelyte.Wubalubadubdub.Event.EventMine;
+import com.github.lyokofirelyte.Wubalubadubdub.Event.EventMobDeath;
 import com.github.lyokofirelyte.Wubalubadubdub.Event.EventSignInteract;
 import com.github.lyokofirelyte.Wubalubadubdub.System.SystemRanks;
 
 import lombok.SneakyThrows;
+import net.minecraft.server.v1_9_R2.IChatBaseComponent;
+import net.minecraft.server.v1_9_R2.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_9_R2.PacketPlayOutChat;
 
 public class Wub extends JavaPlugin implements Listener {
 	
@@ -65,6 +72,12 @@ public class Wub extends JavaPlugin implements Listener {
 	public Object getInstance(Class<?> clazz){
 		return clazzez.get(clazz.getName().toString());
 	}
+	
+	public void updateDisplayBar(Player p, String msg){
+		IChatBaseComponent cbc = ChatSerializer.a("{\"text\": \"" + AS(msg) + "\"}");
+		PacketPlayOutChat chat = new PacketPlayOutChat(cbc, (byte) 2);
+		((CraftPlayer) p).getHandle().playerConnection.sendPacket(chat);
+	}
 
 	@Override
 	public void onEnable(){
@@ -77,14 +90,17 @@ public class Wub extends JavaPlugin implements Listener {
 			CommandReload.class,
 			CommandNick.class,
 			CommandStaff.class,
-			CommandWub.class
+			CommandWub.class,
+			CommandRanks.class
 		});
 		
 		registerListeners(new Class<?>[]{
 			CommandDirector.class,
 			EventChat.class,
 			EventDamageTaken.class,
-			EventSignInteract.class
+			EventSignInteract.class,
+			EventMobDeath.class,
+			EventMine.class
 		});
 		
 		clazzez.put(SystemRanks.class.getName().toString(), new SystemRanks(this));
@@ -128,7 +144,7 @@ public class Wub extends JavaPlugin implements Listener {
 		try {
 			Object serverObject = parser.parse(new FileReader("./plugins/Wubalubadubdub/server/server.json"));
 			JSONObject serverJSONObject = (JSONObject) serverObject;
-			serverObject = new WubServerObject(serverJSONObject);
+			this.serverObject = new WubServerObject(serverJSONObject);
 		} catch (Exception e){
 			e.printStackTrace();
 		}
@@ -186,7 +202,7 @@ public class Wub extends JavaPlugin implements Listener {
 	
 	@Override
 	public void onDisable(){
-		serverObject.put("build", (((int) serverObject.get("build")) + 1));
+		serverObject.put("build", (((long) serverObject.get("build")) + 1));
 		save();
 	}
 	

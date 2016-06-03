@@ -11,6 +11,13 @@ import com.github.lyokofirelyte.Wubalubadubdub.Wub;
 public enum WubData {
 
 	GXP("GXP"),
+	GXP_NEEDED("GXP_NEEDED"),
+	GXP_MOB("GXP_MOB"),
+	GXP_TREE("GXP_TREE"),
+	GXP_ROCK("GXP_ROCK"),
+	GXP_SELL("GXP_SELL"),
+	GXP_COOK("GXP_COOK"),
+	TRADING_STICKS("TRADING_STICKS"),
 	RANK("RANK"),
 	HOMES("HOMES"),
 	PERMS("PERMS"),

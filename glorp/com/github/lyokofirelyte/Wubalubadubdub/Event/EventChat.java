@@ -32,5 +32,6 @@ public class EventChat implements Listener {
 		for (Player po : Bukkit.getOnlinePlayers()){
 			po.sendMessage(main.AS(message));
 		}
+		System.out.println(e.getPlayer().getName() + " > " + e.getMessage());
 	}
 }

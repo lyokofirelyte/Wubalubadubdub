@@ -8,6 +8,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import lombok.SneakyThrows;
+import net.minecraft.server.v1_9_R2.IChatBaseComponent;
+import net.minecraft.server.v1_9_R2.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_9_R2.PacketPlayOutChat;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.craftbukkit.v1_9_R2.entity.CraftPlayer;
@@ -26,6 +31,7 @@ import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandHome;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandNick;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandRanks;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandReload;
+import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandSpawn;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandStaff;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandWub;
 import com.github.lyokofirelyte.Wubalubadubdub.Data.WubData;
@@ -39,16 +45,11 @@ import com.github.lyokofirelyte.Wubalubadubdub.Event.EventMobDeath;
 import com.github.lyokofirelyte.Wubalubadubdub.Event.EventSignInteract;
 import com.github.lyokofirelyte.Wubalubadubdub.System.SystemRanks;
 
-import lombok.SneakyThrows;
-import net.minecraft.server.v1_9_R2.IChatBaseComponent;
-import net.minecraft.server.v1_9_R2.IChatBaseComponent.ChatSerializer;
-import net.minecraft.server.v1_9_R2.PacketPlayOutChat;
-
 public class Wub extends JavaPlugin implements Listener {
 	
 	private List<Object> commands = new ArrayList<>();
 	private List<Object> listeners = new ArrayList<>();
-	private WubServerObject serverObject = new WubServerObject();
+	public WubServerObject serverObject = new WubServerObject();
 	
 	public Map<String, WubObject> playerData = new HashMap<>();
 	public Map<String, Long> cooldowns = new HashMap<>();
@@ -92,7 +93,8 @@ public class Wub extends JavaPlugin implements Listener {
 			CommandNick.class,
 			CommandStaff.class,
 			CommandWub.class,
-			CommandRanks.class
+			CommandRanks.class,
+			CommandSpawn.class
 		});
 		
 		registerListeners(new Class<?>[]{

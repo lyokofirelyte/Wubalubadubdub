@@ -34,10 +34,14 @@ public class EventMine implements Listener {
 	
 	private List<Material> treeBlocks = new ArrayList<Material>(Arrays.asList(
 		Material.LOG,
-		Material.LOG_2,
-		Material.SAND,
-		Material.GRASS,
-		Material.DIRT
+		Material.LOG_2
+	));
+	
+	private List<Material> digBlocks = new ArrayList<Material>(Arrays.asList(
+			Material.SAND,
+			Material.GRASS,
+			Material.DIRT,
+			Material.GRAVEL
 	));
 	
 	public EventMine(Wub i){
@@ -60,6 +64,13 @@ public class EventMine implements Listener {
 				WubData.GXP_TREE.setData(p, percent+1, main);
 			}
 			main.updateDisplayBar(p, "&b\u15D1 Logging: " + percent + "%");
+			((SystemRanks) main.getInstance(SystemRanks.class)).checkForRankup(p);
+		} else if (digBlocks.contains(e.getBlock().getType())) {
+			int percent = WubData.GXP_DIG.getData(p, main).asInt();
+			if(percent < 100) {
+				WubData.GXP_DIG.setData(p, percent+1, main);
+			}
+			main.updateDisplayBar(p, "&b\u15D1 Digging: " + percent + "%");
 			((SystemRanks) main.getInstance(SystemRanks.class)).checkForRankup(p);
 		}
 	}

@@ -8,6 +8,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import lombok.SneakyThrows;
+import net.minecraft.server.v1_9_R2.IChatBaseComponent;
+import net.minecraft.server.v1_9_R2.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_9_R2.PacketPlayOutChat;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.craftbukkit.v1_9_R2.entity.CraftPlayer;
@@ -27,6 +32,7 @@ import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandNick;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandO;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandPerms;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandRanks;
+import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandReboot;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandReload;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandSpawn;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandStaff;
@@ -46,11 +52,6 @@ import com.github.lyokofirelyte.Wubalubadubdub.Event.EventSignInteract;
 import com.github.lyokofirelyte.Wubalubadubdub.System.SystemProtect;
 import com.github.lyokofirelyte.Wubalubadubdub.System.SystemRanks;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
-
-import lombok.SneakyThrows;
-import net.minecraft.server.v1_9_R2.IChatBaseComponent;
-import net.minecraft.server.v1_9_R2.IChatBaseComponent.ChatSerializer;
-import net.minecraft.server.v1_9_R2.PacketPlayOutChat;
 
 public class Wub extends JavaPlugin implements Listener {
 	
@@ -124,7 +125,8 @@ public class Wub extends JavaPlugin implements Listener {
 			CommandStaffList.class,
 			CommandO.class,
 			CommandPerms.class,
-			CommandZone.class
+			CommandZone.class,
+			CommandReboot.class
 		});
 		
 		registerListeners(new Class<?>[]{

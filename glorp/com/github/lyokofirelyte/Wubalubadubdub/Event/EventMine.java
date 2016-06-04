@@ -38,10 +38,10 @@ public class EventMine implements Listener {
 	));
 	
 	private List<Material> digBlocks = new ArrayList<Material>(Arrays.asList(
-			Material.SAND,
-			Material.GRASS,
-			Material.DIRT,
-			Material.GRAVEL
+		Material.SAND,
+		Material.GRASS,
+		Material.DIRT,
+		Material.GRAVEL
 	));
 	
 	public EventMine(Wub i){

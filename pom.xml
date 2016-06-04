@@ -30,6 +30,12 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
+			<groupId>com.github.lyokofirelyte</groupId>
+			<artifactId>we</artifactId>
+			<version>1.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
    			<groupId>com.googlecode.json-simple</groupId>
     		<artifactId>json-simple</artifactId>
     		<version>1.1.1</version>
@@ -81,6 +87,7 @@
        			 	<artifactSet>
   						<excludes>
   							<exclude>com.github.lyokofirelyte:CB:*</exclude>
+  							<exclude>com.github.lyokofirelyte:we:*</exclude>
   							<exclude>com.sk89q:WorldEdit:*</exclude>
   							<exclude>com.comphenix.protocol:ProtocolLib:*</exclude>
   						</excludes>

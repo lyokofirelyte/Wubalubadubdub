@@ -10,6 +10,7 @@ import com.github.lyokofirelyte.Wubalubadubdub.Wub;
 
 public enum WubData {
 
+	REGION_PREVIEW("REGION_PREVIEW"),
 	GXP("GXP"),
 	GXP_NEEDED("GXP_NEEDED"),
 	GXP_MOB("GXP_MOB"),
@@ -57,6 +58,14 @@ public enum WubData {
 		return (String) a;
 	}
 	
+	public boolean asBool(){
+		try {
+			return Boolean.parseBoolean("" + a);
+		} catch (Exception e){
+			return false;
+		}
+	}
+	
 	public int asInt(){
 		try {
 			return Integer.parseInt("" + a);
@@ -74,12 +83,17 @@ public enum WubData {
 	}
 	
 	public List<String> asListString(){
-		JSONArray array = (JSONArray) a;
-		List<String> toReturn = new ArrayList<String>();
-		for (Object o : array){
-			toReturn.add(o.toString());
+		try {
+			JSONArray array = (JSONArray) a;
+			List<String> toReturn = new ArrayList<String>();
+			for (Object o : array){
+				toReturn.add(o.toString());
+			}
+			return toReturn;
+		} catch (Exception e){
+			List<String> toReturn = (List<String>) a;
+			return toReturn;
 		}
-		return toReturn;
 	}
 	
 	public Object asObject(){

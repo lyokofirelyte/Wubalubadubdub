@@ -8,11 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import lombok.SneakyThrows;
-import net.minecraft.server.v1_9_R2.IChatBaseComponent;
-import net.minecraft.server.v1_9_R2.IChatBaseComponent.ChatSerializer;
-import net.minecraft.server.v1_9_R2.PacketPlayOutChat;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.craftbukkit.v1_9_R2.entity.CraftPlayer;
@@ -29,14 +24,18 @@ import org.json.simple.parser.JSONParser;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandDirector;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandHome;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandNick;
+import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandO;
+import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandPerms;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandRanks;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandReload;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandSpawn;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandStaff;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandStaffList;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandWub;
+import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandZone;
 import com.github.lyokofirelyte.Wubalubadubdub.Data.WubData;
 import com.github.lyokofirelyte.Wubalubadubdub.Data.WubObject;
+import com.github.lyokofirelyte.Wubalubadubdub.Data.WubRegion;
 import com.github.lyokofirelyte.Wubalubadubdub.Data.WubServerObject;
 import com.github.lyokofirelyte.Wubalubadubdub.Event.EventChat;
 import com.github.lyokofirelyte.Wubalubadubdub.Event.EventCook;
@@ -44,17 +43,38 @@ import com.github.lyokofirelyte.Wubalubadubdub.Event.EventDamageTaken;
 import com.github.lyokofirelyte.Wubalubadubdub.Event.EventMine;
 import com.github.lyokofirelyte.Wubalubadubdub.Event.EventMobDeath;
 import com.github.lyokofirelyte.Wubalubadubdub.Event.EventSignInteract;
+import com.github.lyokofirelyte.Wubalubadubdub.System.SystemProtect;
 import com.github.lyokofirelyte.Wubalubadubdub.System.SystemRanks;
+import com.sk89q.worldedit.bukkit.WorldEditPlugin;
+
+import lombok.SneakyThrows;
+import net.minecraft.server.v1_9_R2.IChatBaseComponent;
+import net.minecraft.server.v1_9_R2.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_9_R2.PacketPlayOutChat;
 
 public class Wub extends JavaPlugin implements Listener {
 	
 	private List<Object> commands = new ArrayList<>();
 	private List<Object> listeners = new ArrayList<>();
-	public WubServerObject serverObject = new WubServerObject();
+	private Map<String, WubRegion> regions = new HashMap<>();
 	
+	public WubServerObject serverObject = new WubServerObject();
+	public WorldEditPlugin we;
 	public Map<String, WubObject> playerData = new HashMap<>();
 	public Map<String, Long> cooldowns = new HashMap<>();
 	public Map<String, Object> clazzez = new HashMap<>();
+	
+	public String argsToString(String[] args){
+		String full = "";
+		for (String a : args){
+			full += (full.equals("") ? "" : " ") + a;
+		}
+		return full;
+	}
+	
+	public Map<String, WubRegion> getRegions(){
+		return regions;
+	}
 	
 	public boolean isCooldownFinished(Player p, String cooldownName){
 		return !cooldowns.containsKey(p.getUniqueId().toString() + "__" + cooldownName) || System.currentTimeMillis() >= cooldowns.get(p.getUniqueId().toString() + "__" + cooldownName);
@@ -85,7 +105,12 @@ public class Wub extends JavaPlugin implements Listener {
 	@Override
 	public void onEnable(){
 		
+		we = (WorldEditPlugin) Bukkit.getPluginManager().getPlugin("WorldEdit");
+		SystemProtect pro = new SystemProtect(this);
+		commands.add(pro);
+		listeners.add(pro);
 		Bukkit.getPluginManager().registerEvents(this, this);
+		Bukkit.getPluginManager().registerEvents(pro, this);
 		load();
 		
 		registerClasses(new Class<?>[]{
@@ -96,7 +121,10 @@ public class Wub extends JavaPlugin implements Listener {
 			CommandWub.class,
 			CommandRanks.class,
 			CommandSpawn.class,
-			CommandStaffList.class
+			CommandStaffList.class,
+			CommandO.class,
+			CommandPerms.class,
+			CommandZone.class
 		});
 		
 		registerListeners(new Class<?>[]{
@@ -106,7 +134,7 @@ public class Wub extends JavaPlugin implements Listener {
 			EventSignInteract.class,
 			EventMobDeath.class,
 			EventMine.class,
-			EventCook.class
+			EventCook.class,
 		});
 		
 		clazzez.put(SystemRanks.class.getName().toString(), new SystemRanks(this));
@@ -153,6 +181,22 @@ public class Wub extends JavaPlugin implements Listener {
 			this.serverObject = new WubServerObject(serverJSONObject);
 		} catch (Exception e){
 			e.printStackTrace();
+		}
+		
+		/* [regions] */
+		
+		File regionInfo = new File("./plugins/Wubalubadubdub/regions/");
+		regionInfo.mkdirs();
+		
+		for (String region : regionInfo.list()){
+			try {
+				region = region.replace(".json", "");
+				Object regionObject = parser.parse(new FileReader("./plugins/Wubalubadubdub/regions/" + region + ".json"));
+				JSONObject regionJSONObject = (JSONObject) regionObject;
+				getRegions().put(region, new WubRegion(region, this, regionJSONObject));
+			} catch (Exception e){
+				e.printStackTrace();
+			}
 		}
         
         /* [players] */
@@ -223,6 +267,16 @@ public class Wub extends JavaPlugin implements Listener {
 			try {
 				file = new FileWriter("./plugins/Wubalubadubdub/players/" + player + ".json");
 				file.write(playerData.get(player).toJSONString());
+				file.close();
+			} catch (Exception e){
+				e.printStackTrace();
+			}
+		}
+		
+		for (String region : getRegions().keySet()){
+			try {
+				file = new FileWriter("./plugins/Wubalubadubdub/regions/" + region + ".json");
+				file.write(getRegions().get(region).toJSONString());
 				file.close();
 			} catch (Exception e){
 				e.printStackTrace();

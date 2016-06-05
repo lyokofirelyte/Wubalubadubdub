@@ -29,7 +29,7 @@ public enum WubRank {
 	DUKE(9, "a"),
 	REGENT(10, "b"),
 	PRINCE(11, "c"),
-	KINB(12, "d"),
+	KING(12, "d"),
 	EMPEROR(13, "e");
 	
 	WubRank(int rank, String color){

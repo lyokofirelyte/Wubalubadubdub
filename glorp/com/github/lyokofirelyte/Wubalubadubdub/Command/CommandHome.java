@@ -17,7 +17,7 @@ public class CommandHome implements Listener {
 		main = w;
 	}
 
-	@WubCommand(commands = {"home"}, desc = "Return home command", help = "/home")
+	@WubCommand(commands = {"home", "h"}, desc = "Return home command", help = "/home")
 	public void onHome(String[] args, Player p){
 		String home = WubData.HOMES.getData(p, main).asString();
 		if (!home.equals("none")){

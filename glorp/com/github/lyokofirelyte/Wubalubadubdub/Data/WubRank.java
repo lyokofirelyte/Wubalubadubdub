@@ -17,20 +17,20 @@ public enum WubRank {
 	GRAND_DUKE(12, "d"),
 	ARCHDUKE(13, "e");*/
 	
-	SHOCHI(0, "1"),
-	DAICHI(1, "2"),
-	SHOGI(2, "3"),
-	DAIGI(3, "4"),
-	SHOSHIN(4, "5"),
-	DAISHIN(5, "6"),
-	SHOREI(6, "7"),
-	DAIREI(7, "8"),
-	SHOJIN(8, "9"),
-	DAIJIN(9, "a"),
-	SHOTOKU(10, "b"),
-	DAITOKU(11, "c");
-	//GRAND_DUKE(12, "d"),
-	//ARCHDUKE(13, "e");
+	SERF(0, "1"),
+	PEASANT(1, "2"),
+	YEOMAN(2, "3"),
+	SQUIRE(3, "4"),
+	REEVE(4, "5"),
+	KNIGHT(5, "6"),
+	BARON(6, "7"),
+	VISCOUNT(7, "8"),
+	COUNT(8, "9"),
+	DUKE(9, "a"),
+	REGENT(10, "b"),
+	PRINCE(11, "c"),
+	KINB(12, "d"),
+	EMPEROR(13, "e");
 	
 	WubRank(int rank, String color){
 		this.rank = rank;

@@ -35,6 +35,7 @@ import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandSellBuy;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandSpawn;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandStaff;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandStaffList;
+import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandSticks;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandTell;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandWub;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandZone;
@@ -169,7 +170,8 @@ public class Wub extends JavaPlugin implements Listener {
 			CommandReboot.class,
 			CommandTell.class,	
 			CommandCP.class,
-			CommandSellBuy.class
+			CommandSellBuy.class,
+			CommandSticks.class
 		});
 		
 		registerListeners(new Class<?>[]{
@@ -184,6 +186,7 @@ public class Wub extends JavaPlugin implements Listener {
 		});
 		
 		clazzez.put(SystemRanks.class.getName().toString(), new SystemRanks(this));
+		clazzez.put(SystemProtect.class.getName().toString(), pro);
 		
 		for (Player p : Bukkit.getOnlinePlayers()){
 			motd(p);
@@ -223,12 +226,15 @@ public class Wub extends JavaPlugin implements Listener {
 				byte byteString = 0;
 				if (idString.contains(":")){
 					id = Integer.parseInt(idString.split(":")[0]);
-					byteString = Byte.parseByte(idString.split(":")[2]);
+					byteString = Byte.parseByte(idString.split(":")[1]);
 				} else {
 					id = Integer.parseInt(spl[0]);
 				}
-				this.items.put(id, new WubMarkkitItem(id, byteString, spl[1], Integer.parseInt(spl[7]), Integer.parseInt(spl[5]), Integer.parseInt(spl[6]), Integer.parseInt(spl[4])));
-			} catch (Exception nope){}
+				this.items.put(id, new WubMarkkitItem(id, byteString, spl[1], Integer.parseInt(spl[5]), Integer.parseInt(spl[7]), Integer.parseInt(spl[6]), Integer.parseInt(spl[4])));
+				System.out.println("Marrkit id: " + id);
+			} catch (Exception nope){
+				nope.printStackTrace();
+			}
 		}
 		
 		JSONParser parser = new JSONParser();

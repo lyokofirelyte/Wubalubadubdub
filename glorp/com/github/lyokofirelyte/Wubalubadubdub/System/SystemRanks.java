@@ -35,32 +35,21 @@ public class SystemRanks {
 		int dig = WubData.GXP_DIG.getData(p, main).asInt();
 		int gxp = WubData.GXP.getData(p, main).asInt();
 		int needed = WubData.GXP_NEEDED.getData(p, main).asInt();
-		if (WubData.RANK.getData(p, main).asInt() == 2){
-			//main.sendMessage(p, "&c&oYou can't go past this rank during the closed beta yet.");
-			WubData.GXP.setData(p, 0, main);
+		if (combat >= 100 && tree >= 100 && rock >= 100 && cook >= 100 && dig >= 100 && sell >= (WubData.RANK.getData(p, main).asInt() + 1) * 5000){
+			WubData.GXP.setData(p, gxp + 100, main);
+			gxp = WubData.GXP.getData(p, main).asInt();
+			main.updateDisplayBar(p, "&b\u15D1 GXP: " + gxp + " &f/&b " + needed);
+			main.sendMessage(p, "&bYou have earned 100 GXP. Your collection limits have been reset for another cycle.");
 			WubData.GXP_COOK.setData(p, 0, main);
 			WubData.GXP_TREE.setData(p, 0, main);
 			WubData.GXP_ROCK.setData(p, 0, main);
 			WubData.GXP_SELL.setData(p, 0, main);
 			WubData.GXP_MOB.setData(p, 0, main);
 			WubData.GXP_DIG.setData(p, 0, main);
-		} else {
-			if (combat >= 100 && tree >= 100 && rock >= 100 && cook >= 100 && dig >= 100 /*&& sell >= 100*/ ){
-				WubData.GXP.setData(p, gxp + 100, main);
-				gxp = WubData.GXP.getData(p, main).asInt();
-				main.updateDisplayBar(p, "&b\u15D1 GXP: " + gxp + " &f/&b " + needed);
-				main.sendMessage(p, "&bYou have earned 100 GXP. Your collection limits have been reset for another cycle.");
-				WubData.GXP_COOK.setData(p, 0, main);
-				WubData.GXP_TREE.setData(p, 0, main);
-				WubData.GXP_ROCK.setData(p, 0, main);
-				WubData.GXP_SELL.setData(p, 0, main);
-				WubData.GXP_MOB.setData(p, 0, main);
-				WubData.GXP_DIG.setData(p, 0, main);
-				if (gxp >= needed){
-					WubData.GXP.setData(p, 0, main);
-					WubData.GXP_NEEDED.setData(p, needed + 100, main);
-					rankUp(p);
-				}
+			if (gxp >= needed){
+				WubData.GXP.setData(p, 0, main);
+				WubData.GXP_NEEDED.setData(p, needed + 100, main);
+				rankUp(p);
 			}
 		}
 	}

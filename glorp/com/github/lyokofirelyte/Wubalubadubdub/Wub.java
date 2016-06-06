@@ -4,13 +4,22 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import lombok.SneakyThrows;
+import net.minecraft.server.v1_9_R2.IChatBaseComponent;
+import net.minecraft.server.v1_9_R2.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_9_R2.PacketPlayOutChat;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_9_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -57,11 +66,6 @@ import com.github.lyokofirelyte.Wubalubadubdub.System.SystemRanks;
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
-
-import lombok.SneakyThrows;
-import net.minecraft.server.v1_9_R2.IChatBaseComponent;
-import net.minecraft.server.v1_9_R2.IChatBaseComponent.ChatSerializer;
-import net.minecraft.server.v1_9_R2.PacketPlayOutChat;
 
 public class Wub extends JavaPlugin implements Listener {
 	
@@ -152,6 +156,7 @@ public class Wub extends JavaPlugin implements Listener {
 		SystemProtect pro = new SystemProtect(this);
 		commands.add(pro);
 		listeners.add(pro);
+		
 		Bukkit.getPluginManager().registerEvents(this, this);
 		Bukkit.getPluginManager().registerEvents(pro, this);
 		load();
@@ -386,4 +391,5 @@ public class Wub extends JavaPlugin implements Listener {
 	public List<Object> getCommands(){
 		return commands;
 	}
+	
 }

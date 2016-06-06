@@ -35,15 +35,15 @@ public class SystemRanks {
 		int dig = WubData.GXP_DIG.getData(p, main).asInt();
 		int gxp = WubData.GXP.getData(p, main).asInt();
 		int needed = WubData.GXP_NEEDED.getData(p, main).asInt();
-		if (combat >= 100 && tree >= 100 && rock >= 100 && cook >= 100 && dig >= 100 && sell >= (WubData.RANK.getData(p, main).asInt() + 1) * 5000){
+		if (combat >= 100 && tree >= 100 && rock >= 100 && cook >= 100 && dig >= 100 && sell >= (WubData.RANK.getData(p, main).asInt() + 1) * 3500){
 			WubData.GXP.setData(p, gxp + 100, main);
 			gxp = WubData.GXP.getData(p, main).asInt();
 			main.updateDisplayBar(p, "&b\u15D1 GXP: " + gxp + " &f/&b " + needed);
 			main.sendMessage(p, "&bYou have earned 100 GXP. Your collection limits have been reset for another cycle.");
+			main.sendMessage(p, "&b&oThe trading stat does not reset. Instead, each rank's needed trade goes up by 3,500 sticks.");
 			WubData.GXP_COOK.setData(p, 0, main);
 			WubData.GXP_TREE.setData(p, 0, main);
 			WubData.GXP_ROCK.setData(p, 0, main);
-			WubData.GXP_SELL.setData(p, 0, main);
 			WubData.GXP_MOB.setData(p, 0, main);
 			WubData.GXP_DIG.setData(p, 0, main);
 			if (gxp >= needed){

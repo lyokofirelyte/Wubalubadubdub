@@ -41,12 +41,12 @@ public class CommandSellBuy {
 							p.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
 							WubData.TRADING_STICKS.setData(p, WubData.TRADING_STICKS.getData(p, main).asInt() + toSell.getSellAmt(), main);
 							main.sendMessage(p, "&aYou now have &6" + WubData.TRADING_STICKS.getData(p, main).asInt() + " &atrading sticks.");
-							int needed = (WubData.RANK.getData(p, main).asInt() + 1) * 5000;
+							int needed = (WubData.RANK.getData(p, main).asInt() + 1) * 3500;
 							int traded = WubData.GXP_SELL.getData(p, main).asInt();
 							traded += toSell.getSellAmt();
 							float percent = (traded / needed);
 							WubData.GXP_SELL.setData(p, traded, main);
-							main.updateDisplayBar(p, "&b\u15D1 Trading: " + (percent*100) + "%");
+							main.updateDisplayBar(p, "&b\u15D1 Trading: " + ((percent*100) >= 100 ? 100 : (percent*100)) + "%");
 							((SystemRanks) main.getInstance(SystemRanks.class)).checkForRankup(p);
 						}
 					} else {

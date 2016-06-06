@@ -25,6 +25,7 @@ import org.json.simple.parser.JSONParser;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandCP;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandDirector;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandHome;
+import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandModify;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandNick;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandO;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandPerms;
@@ -171,7 +172,8 @@ public class Wub extends JavaPlugin implements Listener {
 			CommandTell.class,	
 			CommandCP.class,
 			CommandSellBuy.class,
-			CommandSticks.class
+			CommandSticks.class,
+			CommandModify.class
 		});
 		
 		registerListeners(new Class<?>[]{

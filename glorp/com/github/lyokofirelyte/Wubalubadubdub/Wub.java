@@ -10,6 +10,7 @@ import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_9_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -21,6 +22,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandCP;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandDirector;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandHome;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandNick;
@@ -29,6 +31,7 @@ import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandPerms;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandRanks;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandReboot;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandReload;
+import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandSellBuy;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandSpawn;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandStaff;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandStaffList;
@@ -36,6 +39,7 @@ import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandTell;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandWub;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandZone;
 import com.github.lyokofirelyte.Wubalubadubdub.Data.WubData;
+import com.github.lyokofirelyte.Wubalubadubdub.Data.WubMarkkitItem;
 import com.github.lyokofirelyte.Wubalubadubdub.Data.WubObject;
 import com.github.lyokofirelyte.Wubalubadubdub.Data.WubRegion;
 import com.github.lyokofirelyte.Wubalubadubdub.Data.WubServerObject;
@@ -44,9 +48,12 @@ import com.github.lyokofirelyte.Wubalubadubdub.Event.EventCook;
 import com.github.lyokofirelyte.Wubalubadubdub.Event.EventDamageTaken;
 import com.github.lyokofirelyte.Wubalubadubdub.Event.EventMine;
 import com.github.lyokofirelyte.Wubalubadubdub.Event.EventMobDeath;
+import com.github.lyokofirelyte.Wubalubadubdub.Event.EventPressParkourSign;
 import com.github.lyokofirelyte.Wubalubadubdub.Event.EventSignInteract;
 import com.github.lyokofirelyte.Wubalubadubdub.System.SystemProtect;
 import com.github.lyokofirelyte.Wubalubadubdub.System.SystemRanks;
+import com.google.common.base.Charsets;
+import com.google.common.io.Files;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 
 import lombok.SneakyThrows;
@@ -65,6 +72,7 @@ public class Wub extends JavaPlugin implements Listener {
 	public Map<String, WubObject> playerData = new HashMap<>();
 	public Map<String, Long> cooldowns = new HashMap<>();
 	public Map<String, Object> clazzez = new HashMap<>();
+	public Map<Integer, WubMarkkitItem> items = new HashMap<>();
 	
 	public String argsToString(String[] args){
 		String full = "";
@@ -72,6 +80,37 @@ public class Wub extends JavaPlugin implements Listener {
 			full += (full.equals("") ? "" : " ") + a;
 		}
 		return full;
+	}
+	
+	public Location stringToLoc(String s){
+		String[] split = s.split(" ");
+		if (split.length == 4){
+			return new Location(Bukkit.getWorld(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2]), Integer.parseInt(split[3]));
+		} else {
+			return new Location(Bukkit.getWorld(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2]), Integer.parseInt(split[3]), Float.parseFloat(split[4]), Float.parseFloat(split[5]));
+		}
+	}
+	
+	public String locToString(Location l){
+		return new String(
+			l.getWorld().getName() + " " +
+			l.getBlockX() + " " +
+			l.getBlockY() + " " + 
+			l.getBlockZ() + " " + 
+			l.getYaw() + " " +
+			l.getPitch()
+		);
+	}
+	
+	public String locToString(Location l, int plusX, int plusY, int plusZ){
+		return new String(
+			l.getWorld().getName() + " " +
+			(l.getBlockX()+plusX) + " " +
+			(l.getBlockY()+plusY) + " " + 
+			(l.getBlockZ()+plusZ) + " " + 
+			l.getYaw() + " " +
+			l.getPitch()
+		);
 	}
 	
 	public Map<String, WubRegion> getRegions(){
@@ -128,7 +167,9 @@ public class Wub extends JavaPlugin implements Listener {
 			CommandPerms.class,
 			CommandZone.class,
 			CommandReboot.class,
-			CommandTell.class
+			CommandTell.class,	
+			CommandCP.class,
+			CommandSellBuy.class
 		});
 		
 		registerListeners(new Class<?>[]{
@@ -139,6 +180,7 @@ public class Wub extends JavaPlugin implements Listener {
 			EventMobDeath.class,
 			EventMine.class,
 			EventCook.class,
+			EventPressParkourSign.class
 		});
 		
 		clazzez.put(SystemRanks.class.getName().toString(), new SystemRanks(this));
@@ -171,6 +213,23 @@ public class Wub extends JavaPlugin implements Listener {
 
 	@SneakyThrows
 	private void load(){
+		
+		File items = new File("./plugins/Wubalubadubdub/server/prices.txt");
+		for (String item : Files.readLines(items, Charsets.UTF_8)){
+			try {
+				String[] spl = item.split("~");
+				String idString = spl[0];
+				int id = 0;
+				byte byteString = 0;
+				if (idString.contains(":")){
+					id = Integer.parseInt(idString.split(":")[0]);
+					byteString = Byte.parseByte(idString.split(":")[2]);
+				} else {
+					id = Integer.parseInt(spl[0]);
+				}
+				this.items.put(id, new WubMarkkitItem(id, byteString, spl[1], Integer.parseInt(spl[7]), Integer.parseInt(spl[5]), Integer.parseInt(spl[6]), Integer.parseInt(spl[4])));
+			} catch (Exception nope){}
+		}
 		
 		JSONParser parser = new JSONParser();
 		

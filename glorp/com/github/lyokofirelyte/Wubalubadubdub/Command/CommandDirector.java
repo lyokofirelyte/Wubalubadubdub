@@ -54,6 +54,10 @@ private Wub main;
 	@EventHandler
 	public void onIncomingCommand(PlayerCommandPreprocessEvent e){
 		
+		if (e.isCancelled()){
+			return;
+		}
+		
 		String[] args = e.getMessage().split(" ");
 		String command = new String("" + args[0].replace("/", ""));
 		Player p = e.getPlayer();

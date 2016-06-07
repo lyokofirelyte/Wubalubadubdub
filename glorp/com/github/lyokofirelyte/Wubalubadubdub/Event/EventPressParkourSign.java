@@ -23,7 +23,7 @@ public class EventPressParkourSign implements Listener {
 	@EventHandler(ignoreCancelled = false)
 	public void onInteract(PlayerInteractEvent e){
 		if (e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.LEFT_CLICK_BLOCK){
-			if (e.getClickedBlock().getType().equals(Material.SIGN) || e.getClickedBlock().getState().getType().equals(Material.SIGN)){
+			if (e.getClickedBlock().getType().equals(Material.WALL_SIGN) || e.getClickedBlock().getType().equals(Material.SIGN)){
 				Sign sign = (Sign) e.getClickedBlock().getState();
 				SystemProtect pro = (SystemProtect) main.getInstance(SystemProtect.class);
 				String regionResult = pro.isInAnyRegion(sign.getLocation());

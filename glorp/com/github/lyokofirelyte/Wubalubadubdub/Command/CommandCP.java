@@ -19,7 +19,7 @@ public class CommandCP {
 	public void onCP(String[] args, Player p){
 		if (!WubData.CHECKPOINT.getData(p, main).asString().equals("none")){
 			if (((SystemProtect) main.getInstance(SystemProtect.class)).isInRegion(p.getLocation(), "emerald")){
-				p.teleport(main.stringToLoc(WubData.CHECKPOINT.getData(p, main).asString()));
+				p.teleport(main.stringToLoc(WubData.CHECKPOINT.getData(p, main).asString()).add(0, 1, 0));
 				main.sendMessage(p, "&aReturned to checkpoint!");
 			} else {
 				main.sendMessage(p, "&c&oYou can't do that from here.");

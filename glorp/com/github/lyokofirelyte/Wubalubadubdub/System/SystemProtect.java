@@ -183,7 +183,7 @@ public class SystemProtect implements Listener {
 		String result = isInAnyRegion(e.getPlayer().getLocation());
 		
 		if (hasFlag(result, WubFlag.USE_COMMANDS)){
-			if (!hasRegionPerms(e.getPlayer(), result)){
+			if (!hasRegionPerms(e.getPlayer(), result) && !e.getMessage().startsWith("/cp") && !e.getMessage().startsWith("/spawn") && !e.getMessage().startsWith("/tell")){
 				e.setCancelled(true);
 				main.sendMessage(e.getPlayer(), "&c&oYou are not authorized to use commands at &6" + result + "&c&o.");
 			}

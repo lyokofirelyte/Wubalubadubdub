@@ -12,6 +12,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Sign;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Painting;
 import org.bukkit.entity.Player;
@@ -33,10 +34,12 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 import org.json.simple.JSONArray;
 
@@ -71,6 +74,19 @@ public class SystemProtect implements Listener {
 	}
 	
 	@EventHandler
+	public void onClose(InventoryCloseEvent e){
+		if (e.getInventory().getTitle().contains("Deliveries")){
+			List<String> items = new ArrayList<String>();
+			for (ItemStack i : e.getInventory().getContents()){
+				try {
+					items.add(i.getTypeId() + " " + i.getAmount() + " " + i.getData().getData());
+				} catch (Exception eee){}
+			}
+			WubData.MARKKIT_BOX.setData((Player) e.getPlayer(), items, main);
+		}
+	}
+	
+	@EventHandler
 	public void onBreak(BlockBreakEvent e){
 		
 		String result = isInAnyRegion(e.getBlock().getLocation());
@@ -84,6 +100,19 @@ public class SystemProtect implements Listener {
 		
 		if (e.getPlayer().getGameMode().equals(GameMode.CREATIVE) && e.getPlayer().getItemInHand().getType().equals(Material.BLAZE_ROD)){
 			e.setCancelled(true);
+		}
+		
+		if (e.getBlock().getType().equals(Material.SIGN) || e.getBlock().getType().equals(Material.WALL_SIGN)){
+			Sign sign = (Sign) e.getBlock().getState();
+			if (sign.getLines().length > 0){
+				if (sign.getLines()[0].contains("[ Wub ]")){
+					if (!WubData.PERMS.getData(e.getPlayer(), main).asListString().contains("wub.signs.break")){
+						e.setCancelled(true);
+						main.sendMessage(e.getPlayer(), "&c&oYou need wub.signs.break to break signs with [ Wub ] on them.");
+						main.sendMessage(e.getPlayer(), "&c&oAdmins: /perms add <player> wub.signs.break");
+					}
+				}
+			}
 		}
 	}
 	

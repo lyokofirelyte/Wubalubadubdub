@@ -4,22 +4,13 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import lombok.SneakyThrows;
-import net.minecraft.server.v1_9_R2.IChatBaseComponent;
-import net.minecraft.server.v1_9_R2.IChatBaseComponent.ChatSerializer;
-import net.minecraft.server.v1_9_R2.PacketPlayOutChat;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_9_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -63,9 +54,18 @@ import com.github.lyokofirelyte.Wubalubadubdub.Event.EventPressParkourSign;
 import com.github.lyokofirelyte.Wubalubadubdub.Event.EventSignInteract;
 import com.github.lyokofirelyte.Wubalubadubdub.System.SystemProtect;
 import com.github.lyokofirelyte.Wubalubadubdub.System.SystemRanks;
+import com.github.lyokofirelyte.Wubalubadubdub.Timer.TimerMarkkit;
+import com.github.lyokofirelyte.Wubalubadubdub.Timer.WubTimer;
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
+
+import lombok.SneakyThrows;
+import net.minecraft.server.v1_9_R2.IChatBaseComponent;
+import net.minecraft.server.v1_9_R2.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_9_R2.PacketPlayOutChat;
+import net.minecraft.server.v1_9_R2.PacketPlayOutTitle;
+import net.minecraft.server.v1_9_R2.PacketPlayOutTitle.EnumTitleAction;
 
 public class Wub extends JavaPlugin implements Listener {
 	
@@ -78,7 +78,32 @@ public class Wub extends JavaPlugin implements Listener {
 	public Map<String, WubObject> playerData = new HashMap<>();
 	public Map<String, Long> cooldowns = new HashMap<>();
 	public Map<String, Object> clazzez = new HashMap<>();
-	public Map<Integer, WubMarkkitItem> items = new HashMap<>();
+	public Map<String, WubMarkkitItem> items = new HashMap<>();
+	public Map<String, WubTimer> tasks = new HashMap<>();
+	
+	public void addTimer(WubTimer task){
+		tasks.put(task.getName(), task);
+	}
+	
+	public void sendTitle(Player player, String top, String bottom){
+		IChatBaseComponent chatTitle = ChatSerializer.a("{\"text\": \"" + AS(top) + "\"}");
+		IChatBaseComponent chatSubtitle = ChatSerializer.a("{\"text\": \"" + AS(bottom) + "\"}");
+
+		PacketPlayOutTitle title = new PacketPlayOutTitle(EnumTitleAction.TITLE, chatTitle);
+		PacketPlayOutTitle length = new PacketPlayOutTitle(0, 10, 0);
+		((CraftPlayer) player).getHandle().playerConnection.sendPacket(title);
+		((CraftPlayer) player).getHandle().playerConnection.sendPacket(length);
+		
+		title = new PacketPlayOutTitle(EnumTitleAction.SUBTITLE, chatSubtitle);
+		length = new PacketPlayOutTitle(0, 10, 0);
+		((CraftPlayer) player).getHandle().playerConnection.sendPacket(title);
+		((CraftPlayer) player).getHandle().playerConnection.sendPacket(length);
+	}
+	
+	public void clearTitle(Player p){
+		PacketPlayOutTitle title = new PacketPlayOutTitle(EnumTitleAction.CLEAR, null);
+		((CraftPlayer) p).getHandle().playerConnection.sendPacket(title);
+	}
 	
 	public String argsToString(String[] args){
 		String full = "";
@@ -86,6 +111,21 @@ public class Wub extends JavaPlugin implements Listener {
 			full += (full.equals("") ? "" : " ") + a;
 		}
 		return full;
+	}
+	
+	public WubMarkkitItem getMarkkitItemFromLines(String[] lines){
+		try {
+			String idData = lines[2].split(" ")[0];
+			int stackAmount = Integer.parseInt(lines[2].split(" ")[1].replace("*", ""));
+			WubMarkkitItem item = items.containsKey(idData) ? items.get(idData) : null;
+			if (item != null){
+				item.setBuyStackAmt(stackAmount);
+				item.setSellStackAmt(stackAmount);
+			}
+			return item;
+		} catch (Exception e){
+			return null;
+		}
 	}
 	
 	public Location stringToLoc(String s){
@@ -200,7 +240,14 @@ public class Wub extends JavaPlugin implements Listener {
 			WubData.INVULN.setData(p, 0, this);
 		}
 		
+		startTimers();
+		
 		System.out.println("That's the way the news goes!");
+	}
+	
+	private void startTimers(){
+		tasks.put("markkit", new TimerMarkkit("markkit", 0L, 500L, this));
+		tasks.get("markkit").cycle();
 	}
 	
 	@SneakyThrows
@@ -236,8 +283,9 @@ public class Wub extends JavaPlugin implements Listener {
 					byteString = Byte.parseByte(idString.split(":")[1]);
 				} else {
 					id = Integer.parseInt(spl[0]);
+					idString += ":0";
 				}
-				this.items.put(id, new WubMarkkitItem(id, byteString, spl[1], Integer.parseInt(spl[5]), Integer.parseInt(spl[7]), Integer.parseInt(spl[6]), Integer.parseInt(spl[4])));
+				this.items.put(idString, new WubMarkkitItem(id, byteString, spl[1], Integer.parseInt(spl[5]), Integer.parseInt(spl[7]), Integer.parseInt(spl[6]), Integer.parseInt(spl[4])));
 				System.out.println("Marrkit id: " + id);
 			} catch (Exception nope){
 				nope.printStackTrace();

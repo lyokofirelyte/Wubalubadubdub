@@ -29,5 +29,6 @@ public class WubObject extends JSONObject {
 		put(WubData.INVULN.getName(), 0);
 		put(WubData.STAFF_RANK.getName(), "");
 		put(WubData.GXP_NEEDED.getName(), 100);
+		put(WubData.MARKKIT_BOX.getName(), new ArrayList<String>());
 	}
 }

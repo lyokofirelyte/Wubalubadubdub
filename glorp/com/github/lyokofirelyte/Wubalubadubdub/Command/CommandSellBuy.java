@@ -48,7 +48,7 @@ public class CommandSellBuy {
 		main = w;
 	}
 
-	@WubCommand(commands = {"sell"}, help = "/sell", desc = "Sell your whole stack!")
+	//@WubCommand(commands = {"sell"}, help = "/sell", desc = "Sell your whole stack!")
 	public void onSell(String[] args, Player p){
 		
 		if (p.getInventory().getItemInMainHand() != null && p.getGameMode() == GameMode.SURVIVAL){
@@ -84,7 +84,7 @@ public class CommandSellBuy {
 		}
 	}
 	
-	@WubCommand(commands = {"buy"}, help = "/buy <item:data> <amount> ", desc = "Buy shit from the markkit")
+	//@WubCommand(commands = {"buy"}, help = "/buy <item:data> <amount> ", desc = "Buy shit from the markkit")
 	public void onBuy(String[] args, Player p){
 		
 		if (((SystemProtect) main.getInstance(SystemProtect.class)).isInRegion(p.getLocation(), "markkit")){

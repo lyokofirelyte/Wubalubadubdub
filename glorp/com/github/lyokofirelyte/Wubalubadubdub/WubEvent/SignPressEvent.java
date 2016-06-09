@@ -1,12 +1,18 @@
 package com.github.lyokofirelyte.Wubalubadubdub.WubEvent;
 
+import java.util.List;
+
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 import com.github.lyokofirelyte.Wubalubadubdub.Wub;
 import com.github.lyokofirelyte.Wubalubadubdub.Data.WubData;
+import com.github.lyokofirelyte.Wubalubadubdub.Data.WubMarkkitItem;
 import com.github.lyokofirelyte.Wubalubadubdub.Data.WubRegion;
 
 import lombok.Getter;
@@ -62,9 +68,72 @@ public class SignPressEvent {
 			for (int i = 0; i < lines.length; i++){
 				lines[i] = ChatColor.stripColor(main.AS(lines[i]));
 			}
-			if (lines[0].equals("[ Wub ]")){
-				
+			WubMarkkitItem item = main.getMarkkitItemFromLines(lines);
+			if (item != null){
+				int yourCash = WubData.TRADING_STICKS.getData(presser, main).asInt();
+				int cost = (item.getBuyAmt() / 64) * item.getBuyStackAmt();
+				if (lines[1].contains("Buy")){
+					if (yourCash >= cost){
+						if (WubData.MARKKIT_BOX.getData(presser, main).asListString().size() < 54){
+							WubData.TRADING_STICKS.setData(presser, yourCash - cost, main);
+							addToBox(item.getId(), item.getIdByte(), item.getBuyStackAmt());
+							presser.sendMessage("");
+							main.sendMessage(presser, "&aPurchased &6" + item.getBuyStackAmt() + " &aof &6" + item.getName() + "&a! You have &6" + WubData.TRADING_STICKS.getData(presser, main).asInt() + " &asticks left.");
+							main.sendMessage(presser, "&a&oClaim all of your purchases in the mailbox near the front of the markkit when you leave.");
+							presser.sendMessage("");
+						} else {
+							main.sendMessage(presser, "&c&oYour mailbox is full. Clear it out first!");
+						}
+					} else {
+						main.sendMessage(presser, "&c&oYou can't afford that.");
+					}
+				} else if (lines[1].contains("Sell")){
+					int toRemove = -1;
+					for (int x = 0; x < presser.getInventory().getContents().length; x++){
+						ItemStack i = presser.getInventory().getContents()[x];
+						if (i.getTypeId() == item.getId() && i.getData().getData() == item.getIdByte() && i.getAmount() == item.getSellStackAmt()){
+							WubData.TRADING_STICKS.setData(presser, yourCash + cost, main);
+							main.sendMessage(presser, "&aSold &6" + item.getSellStackAmt() + " &aof &6" + item.getName() + "&a! You have &6" + WubData.TRADING_STICKS.getData(presser, main).asInt() + " &asticks left.");
+							toRemove = x;
+							break;
+						}
+					}
+					if (toRemove != -1){
+						presser.getInventory().remove(toRemove);
+					}
+				}
+			}
+			if (lines[0].contains("[ Mailbox ]")){
+				displayBox();
+			}
+			if (WubData.PERMS.getData(presser, main).asListString().contains("wub.signs.edit")){
+				ItemStack inHand = presser.getInventory().getItemInMainHand();
+				if (main.items.containsKey(inHand.getTypeId() + ":" + inHand.getData().getData())){
+					WubMarkkitItem theItem = main.items.get(inHand.getTypeId() + ":" + inHand.getData().getData());
+					sign.setLine(0, "[ Wub ]");
+					sign.setLine(1, main.AS(presser.isSneaking() ? "&aSell" : "&cBuy"));
+					sign.setLine(2, theItem.getId() + ":" + theItem.getIdByte() + " *" + (presser.isSneaking() ? theItem.getSellStackAmt() : theItem.getBuyStackAmt()));
+					sign.setLine(3, "> press <");
+					sign.update();
+				}
 			}
 		}
+	}
+	
+	private void addToBox(int id, byte data, int amount){
+		List<String> items = WubData.MARKKIT_BOX.getData(presser, main).asListString();
+		items.add(id + " " + amount + " " + data);
+		WubData.MARKKIT_BOX.setData(presser, items, main);
+	}
+	
+	private void displayBox(){
+		List<String> items = WubData.MARKKIT_BOX.getData(presser, main).asListString();
+		Inventory inv = Bukkit.createInventory(null, 54, main.AS("&aDeliveries"));
+		for (String item : items){
+			String[] spl = item.split(" ");
+			ItemStack i = new ItemStack(Integer.parseInt(spl[0]), Integer.parseInt(spl[1]), Byte.parseByte(spl[2]));
+			inv.addItem(i);
+		}
+		presser.openInventory(inv);
 	}
 }

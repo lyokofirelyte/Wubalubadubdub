@@ -15,7 +15,7 @@ public class CommandRanks implements Listener {
 		main = w;
 	}
 
-	@WubCommand(commands = {"ranks"}, perm = "wub.lub", help = "/ranks", desc = "Rank Information")
+	@WubCommand(commands = {"ranks", "stats"}, perm = "wub.lub", help = "/ranks", desc = "Rank Information")
 	public void onRanks(String[] args, Player p){
 		main.sendMessage(p, 
 			"&6Rank up by earning GXP. GXP is broken up into 5 parts:", 

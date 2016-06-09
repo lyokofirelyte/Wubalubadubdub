@@ -41,27 +41,20 @@ public class EventCook implements Listener {
 		Player p = e.getPlayer();
 		int percent = WubData.GXP_COOK.getData(p, main).asInt();
 		
-		if(percent < 100) {
-
+		if (percent < 100) {
 			if(oreBlocks.contains(e.getBlock().getType())) {
 				//Do something with ores
 				WubData.GXP_COOK.setData(p, percent + ((int) e.getItemAmount() / 2), main);
-			
 			} else if(foodItems.contains(e.getBlock().getType())) {
 				//Do something for food items
 				WubData.GXP_COOK.setData(p, percent + ((int) e.getItemAmount() / 3), main);
-
 			} else {
 				//Do something with things of less value, aka stone/netherbrick/whatever else
 				WubData.GXP_COOK.setData(p, percent + ((int) e.getItemAmount() / 4), main);
-
 			}
 			
 			main.updateDisplayBar(p, "&b\u15D1 Cooking: " + percent + "%");
-			((SystemRanks) main.getInstance(SystemRanks.class)).checkForRankup(p);
-			
-		}
-		
+			((SystemRanks) main.getInstance(SystemRanks.class)).checkForRankup(p);	
+		}	
 	}
-
 }

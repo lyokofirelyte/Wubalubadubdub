@@ -28,7 +28,8 @@ public enum WubData {
 	INVULN("INVULN"),
 	STAFF_RANK("STAFF_RANK"),
 	DISPLAY_NAME("DISPLAY_NAME"),
-	R("R");
+	R("R"),
+	MARKKIT_BOX("MARKKIT_BOX");
 	
 	WubData(String name){
 		this.name = name;

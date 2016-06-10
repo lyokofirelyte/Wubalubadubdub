@@ -5,6 +5,7 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -89,18 +90,21 @@ public class SignPressEvent {
 					}
 				} else if (lines[1].contains("Sell")){
 					int toRemove = -1;
-					for (int x = 0; x < presser.getInventory().getContents().length; x++){
-						ItemStack i = presser.getInventory().getContents()[x];
-						if (i.getTypeId() == item.getId() && i.getData().getData() == item.getIdByte() && i.getAmount() == item.getSellStackAmt()){
-							WubData.TRADING_STICKS.setData(presser, yourCash + cost, main);
-							main.sendMessage(presser, "&aSold &6" + item.getSellStackAmt() + " &aof &6" + item.getName() + "&a! You have &6" + WubData.TRADING_STICKS.getData(presser, main).asInt() + " &asticks left.");
-							toRemove = x;
-							break;
-						}
+//					for (int x = 0; x < presser.getInventory().getContents().length; x++){
+					ItemStack i = presser.getItemInHand();
+					if (i != null && i.getTypeId() == item.getId() && i.getData().getData() == item.getIdByte() && i.getAmount() == item.getSellStackAmt()){
+						WubData.TRADING_STICKS.setData(presser, yourCash + cost, main);
+						main.sendMessage(presser, "&aSold &6" + item.getSellStackAmt() + " &aof &6" + item.getName() + "&a! You have &6" + WubData.TRADING_STICKS.getData(presser, main).asInt() + " &asticks left.");
+						presser.setItemInHand(new ItemStack(Material.AIR));
+//						toRemove = x;
+//						break;
+					} else {
+						main.sendMessage(presser, "You're holding the wrong item in your hand or it's not a full stack!");
 					}
-					if (toRemove != -1){
-						presser.getInventory().remove(toRemove);
-					}
+//					}
+//					if (toRemove != -1){
+//						presser.getInventory().remove(toRemove);
+//					}
 				}
 			}
 			if (lines[0].contains("[ Mailbox ]")){

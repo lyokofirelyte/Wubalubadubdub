@@ -89,7 +89,6 @@
   							<exclude>com.github.lyokofirelyte:CB:*</exclude>
   							<exclude>com.github.lyokofirelyte:we:*</exclude>
   							<exclude>com.sk89q:WorldEdit:*</exclude>
-  							<exclude>com.comphenix.protocol:ProtocolLib:*</exclude>
   						</excludes>
 					</artifactSet>
 				</configuration>

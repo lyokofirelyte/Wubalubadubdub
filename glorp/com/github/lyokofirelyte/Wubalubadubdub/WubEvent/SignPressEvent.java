@@ -94,7 +94,7 @@ public class SignPressEvent {
 					ItemStack i = presser.getItemInHand();
 					if (i != null && i.getTypeId() == item.getId() && i.getData().getData() == item.getIdByte() && i.getAmount() == item.getSellStackAmt()){
 						WubData.TRADING_STICKS.setData(presser, yourCash + cost, main);
-						main.sendMessage(presser, "&aSold &6" + item.getSellStackAmt() + " &aof &6" + item.getName() + "&a! You have &6" + WubData.TRADING_STICKS.getData(presser, main).asInt() + " &asticks left.");
+						main.sendMessage(presser, "&aSold &6" + item.getSellStackAmt() + " &aof &6" + item.getName() + "&a! You now have &6" + WubData.TRADING_STICKS.getData(presser, main).asInt() + " &asticks.");
 						presser.setItemInHand(new ItemStack(Material.AIR));
 						WubData.GXP_SELL.setData(presser, WubData.GXP_SELL.getData(presser, main).asInt() + cost, main);
 //						toRemove = x;

@@ -35,6 +35,7 @@ public class SystemRanks {
 		int dig = WubData.GXP_DIG.getData(p, main).asInt();
 		int gxp = WubData.GXP.getData(p, main).asInt();
 		int needed = WubData.GXP_NEEDED.getData(p, main).asInt();
+		//System.out.println("combat: " + combat + "/100 tree: " + tree + "/100 rock: " + rock + "/100 cook: " + cook + "/100 dig: " + dig + "/100 sell: " + sell + "/" + (WubData.RANK.getData(p, main).asInt() + 1) * 3500);
 		if (combat >= 100 && tree >= 100 && rock >= 100 && cook >= 100 && dig >= 100 && sell >= (WubData.RANK.getData(p, main).asInt() + 1) * 3500){
 			WubData.GXP.setData(p, gxp + 100, main);
 			gxp = WubData.GXP.getData(p, main).asInt();

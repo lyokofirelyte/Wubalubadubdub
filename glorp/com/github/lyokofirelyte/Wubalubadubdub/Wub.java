@@ -8,10 +8,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import lombok.SneakyThrows;
+import net.minecraft.server.v1_10_R1.IChatBaseComponent;
+import net.minecraft.server.v1_10_R1.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_10_R1.PacketPlayOutChat;
+import net.minecraft.server.v1_10_R1.PacketPlayOutTitle;
+import net.minecraft.server.v1_10_R1.PacketPlayOutTitle.EnumTitleAction;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_9_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_10_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -59,13 +66,6 @@ import com.github.lyokofirelyte.Wubalubadubdub.Timer.WubTimer;
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
-
-import lombok.SneakyThrows;
-import net.minecraft.server.v1_9_R2.IChatBaseComponent;
-import net.minecraft.server.v1_9_R2.IChatBaseComponent.ChatSerializer;
-import net.minecraft.server.v1_9_R2.PacketPlayOutChat;
-import net.minecraft.server.v1_9_R2.PacketPlayOutTitle;
-import net.minecraft.server.v1_9_R2.PacketPlayOutTitle.EnumTitleAction;
 
 public class Wub extends JavaPlugin implements Listener {
 	

@@ -35,6 +35,7 @@ import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandHome;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandModify;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandNick;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandO;
+import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandPay;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandPerms;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandRanks;
 import com.github.lyokofirelyte.Wubalubadubdub.Command.CommandRankup;
@@ -220,7 +221,8 @@ public class Wub extends JavaPlugin implements Listener {
 			CommandSellBuy.class,
 			CommandSticks.class,
 			CommandModify.class,
-			CommandRankup.class
+			CommandRankup.class,
+			CommandPay.class
 		});
 		
 		registerListeners(new Class<?>[]{

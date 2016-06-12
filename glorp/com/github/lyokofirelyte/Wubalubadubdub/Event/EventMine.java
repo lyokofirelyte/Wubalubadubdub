@@ -24,7 +24,7 @@ public class EventMine implements Listener {
 		Material.IRON_ORE,
 		Material.OBSIDIAN,
 		Material.REDSTONE_ORE,
-		Material.COAL_BLOCK,
+		Material.COAL_ORE,
 		Material.STONE,
 		Material.EMERALD_ORE,
 		Material.QUARTZ_ORE,

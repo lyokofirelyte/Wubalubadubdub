@@ -72,8 +72,8 @@ public class SignPressEvent {
 			WubMarkkitItem item = main.getMarkkitItemFromLines(lines);
 			if (item != null){
 				int yourCash = WubData.TRADING_STICKS.getData(presser, main).asInt();
-				int cost = (item.getBuyAmt() / 64) * item.getBuyStackAmt();
 				if (lines[1].contains("Buy")){
+					int cost = item.getBuyAmt()  * item.getBuyStackAmt() / 64;
 					if (yourCash >= cost){
 						if (WubData.MARKKIT_BOX.getData(presser, main).asListString().size() < 54){
 							WubData.TRADING_STICKS.setData(presser, yourCash - cost, main);
@@ -89,8 +89,9 @@ public class SignPressEvent {
 						main.sendMessage(presser, "&c&oYou can't afford that.");
 					}
 				} else if (lines[1].contains("Sell")){
-					int toRemove = -1;
+//					int toRemove = -1;
 //					for (int x = 0; x < presser.getInventory().getContents().length; x++){
+					int cost = item.getSellAmt()  * item.getSellStackAmt() / 64;
 					ItemStack i = presser.getItemInHand();
 					if (i != null && i.getTypeId() == item.getId() && i.getData().getData() == item.getIdByte() && i.getAmount() == item.getSellStackAmt()){
 						WubData.TRADING_STICKS.setData(presser, yourCash + cost, main);

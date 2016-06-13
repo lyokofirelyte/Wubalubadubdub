@@ -50,7 +50,7 @@ public class SignPressEvent {
 	
 	public void fire(){
 		
-		if (region.getName().equals("emerald")){
+		if (region != null && region.getName().equals("emerald")){
 			if (lines[0].contains("[ Wub ]")){
 				if (lines[1].contains("Checkpoint")){
 					WubData.CHECKPOINT.setData(presser, main.locToString(presser.getLocation()), main);
@@ -65,7 +65,7 @@ public class SignPressEvent {
 			}
 		}
 		
-		if (region.getName().equals("markkit")){
+		if (region != null && region.getName().equals("markkit")){
 			for (int i = 0; i < lines.length; i++){
 				lines[i] = ChatColor.stripColor(main.AS(lines[i]));
 			}

@@ -51,9 +51,9 @@ public class TimerMarkkit implements WubTimer {
 								WubMarkkitItem item = main.getMarkkitItemFromLines(sign.getLines());
 								if (item != null){
 									if (sign.getLines()[1].contains("Buy")){
-										main.sendTitle(p, main.AS("&bBuy " + item.getBuyStackAmt() + " " + item.getName()), "&b&o" + ((item.getBuyAmt() / 64) * item.getBuyStackAmt()) + " sticks");
+										main.sendTitle(p, main.AS("&bBuy " + item.getBuyStackAmt() + " " + item.getName()), "&b&o" + (item.getBuyAmt() * item.getBuyStackAmt() / 64) + " sticks");
 									} else if (sign.getLines()[1].contains("Sell")){
-										main.sendTitle(p, main.AS("&bSell " + item.getSellStackAmt() + " " + item.getName()), "&b&o" + ((item.getSellAmt() / 64) * item.getSellStackAmt()) + " sticks");
+										main.sendTitle(p, main.AS("&bSell " + item.getSellStackAmt() + " " + item.getName()), "&b&o" + (item.getSellAmt() * item.getSellStackAmt() / 64) + " sticks");
 									}
 									main.updateDisplayBar(p, "&aRight-click to confirm transaction!");
 								}

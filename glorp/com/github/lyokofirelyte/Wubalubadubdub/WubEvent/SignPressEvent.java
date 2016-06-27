@@ -50,7 +50,7 @@ public class SignPressEvent {
 	
 	public void fire(){
 		
-		if (region.getName().equals("emerald")){
+		if (region != null && region.getName().equals("emerald")){
 			if (lines[0].contains("[ Wub ]")){
 				if (lines[1].contains("Checkpoint")){
 					WubData.CHECKPOINT.setData(presser, main.locToString(presser.getLocation()), main);
@@ -65,15 +65,15 @@ public class SignPressEvent {
 			}
 		}
 		
-		if (region.getName().equals("markkit")){
+		if (region != null && region.getName().equals("markkit")){
 			for (int i = 0; i < lines.length; i++){
 				lines[i] = ChatColor.stripColor(main.AS(lines[i]));
 			}
 			WubMarkkitItem item = main.getMarkkitItemFromLines(lines);
 			if (item != null){
 				int yourCash = WubData.TRADING_STICKS.getData(presser, main).asInt();
-				int cost = (item.getBuyAmt() / 64) * item.getBuyStackAmt();
 				if (lines[1].contains("Buy")){
+					int cost = item.getBuyAmt()  * item.getBuyStackAmt() / 64;
 					if (yourCash >= cost){
 						if (WubData.MARKKIT_BOX.getData(presser, main).asListString().size() < 54){
 							WubData.TRADING_STICKS.setData(presser, yourCash - cost, main);
@@ -89,23 +89,27 @@ public class SignPressEvent {
 						main.sendMessage(presser, "&c&oYou can't afford that.");
 					}
 				} else if (lines[1].contains("Sell")){
-					int toRemove = -1;
-//					for (int x = 0; x < presser.getInventory().getContents().length; x++){
-					ItemStack i = presser.getItemInHand();
-					if (i != null && i.getTypeId() == item.getId() && i.getData().getData() == item.getIdByte() && i.getAmount() == item.getSellStackAmt()){
-						WubData.TRADING_STICKS.setData(presser, yourCash + cost, main);
-						main.sendMessage(presser, "&aSold &6" + item.getSellStackAmt() + " &aof &6" + item.getName() + "&a! You now have &6" + WubData.TRADING_STICKS.getData(presser, main).asInt() + " &asticks.");
-						presser.setItemInHand(new ItemStack(Material.AIR));
-						WubData.GXP_SELL.setData(presser, WubData.GXP_SELL.getData(presser, main).asInt() + cost, main);
-//						toRemove = x;
-//						break;
-					} else {
-						main.sendMessage(presser, "You're holding the wrong item in your hand or it's not a full stack!");
+					int cost = item.getSellAmt()  * item.getSellStackAmt() / 64;
+					boolean found = false;
+					
+					for(int x = 0; x < presser.getInventory().getContents().length; x++) {
+						ItemStack i = presser.getInventory().getContents()[x];
+						if(i != null && i.getAmount() >= item.getSellStackAmt() && i.getTypeId() == item.getId() && i.getData().getData() == item.getIdByte()) {
+							if(i.getAmount() - item.getSellStackAmt() > 0) {
+								i.setAmount(i.getAmount() - item.getSellStackAmt());
+							} else {
+								presser.getInventory().setItem(x, new ItemStack(Material.AIR));
+							}						
+							WubData.TRADING_STICKS.setData(presser, yourCash + cost, main);
+							main.sendMessage(presser, "&aSold &6" + item.getSellStackAmt() + " &aof &6" + item.getName() + "&a! You now have &6" + WubData.TRADING_STICKS.getData(presser, main).asInt() + " &asticks.");
+							WubData.GXP_SELL.setData(presser, WubData.GXP_SELL.getData(presser, main).asInt() + cost, main);
+							found = true;
+							break;
+						}
 					}
-//					}
-//					if (toRemove != -1){
-//						presser.getInventory().remove(toRemove);
-//					}
+					
+					if(!found) main.sendMessage(presser, "You don't have this item in your inventory!");
+					
 				}
 			}
 			if (lines[0].contains("[ Mailbox ]")){

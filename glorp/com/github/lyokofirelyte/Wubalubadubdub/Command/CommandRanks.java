@@ -23,7 +23,7 @@ public class CommandRanks implements Listener {
 			"&eLogging&f: &eChopping trees (" + WubData.GXP_TREE.getData(p, main).asInt() + "%)",
 			"&eMining&f: &eMining rocks or gems (" + WubData.GXP_ROCK.getData(p, main).asInt() + "%)",
 			"&eDigging&f: &eMining dirt, gravel or sand (" + WubData.GXP_DIG.getData(p, main).asInt() + "%)",
-			"&eTrade&f: &eSelling things in the market (" + WubData.GXP_SELL.getData(p, main).asInt() / (WubData.RANK.getData(p, main).asInt() + 1)*3500 + "%)",
+			"&eTrade&f: &eSelling things in the market (" + ((WubData.GXP_SELL.getData(p, main).asInt() * 100) / ((WubData.RANK.getData(p, main).asInt() + 1)*3500)) + "%)",
 			"&eFood&f: &eCooking things (" + WubData.GXP_COOK.getData(p, main).asInt() + "%)",
 			"&6Each part has a limit you must reach. After all of the limits are reached, GXP is granted.",
 			"&6&oOnce enough GXP is gained, you will rank up. Your limits are reset when you gain GXP."

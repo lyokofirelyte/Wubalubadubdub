@@ -288,7 +288,6 @@ public class Wub extends JavaPlugin implements Listener {
 					idString += ":0";
 				}
 				this.items.put(idString, new WubMarkkitItem(id, byteString, spl[1], Integer.parseInt(spl[5]), Integer.parseInt(spl[7]), Integer.parseInt(spl[6]), Integer.parseInt(spl[4])));
-				System.out.println("Marrkit id: " + id);
 			} catch (Exception nope){
 				nope.printStackTrace();
 			}

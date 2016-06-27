@@ -419,7 +419,8 @@ public class Wub extends JavaPlugin implements Listener {
 	public void motd(Player p){
 		sendMessage(p, new String[]{
 			"&2Welcome! We're running &bWubalubadubdub v1.0, &2build &f#" + serverObject.get("build"),
-			"&2Type &3/wub &2for a list of commands!"
+			"&2Type &3/wub &2for a list of commands!",
+			"&a&oNew home every 3rd rank!"
 		});
 	}
 	

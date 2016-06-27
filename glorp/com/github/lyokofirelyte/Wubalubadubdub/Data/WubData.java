@@ -94,8 +94,14 @@ public enum WubData {
 			}
 			return toReturn;
 		} catch (Exception e){
-			List<String> toReturn = (List<String>) a;
-			return toReturn;
+			try {
+				List<String> toReturn = (List<String>) a;
+				return toReturn;
+			} catch (Exception eee){
+				List<String> toReturn = new ArrayList<String>();
+				toReturn.add((String) a);
+				return toReturn;
+			}
 		}
 	}
 	

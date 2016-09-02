@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -51,27 +52,29 @@ public class EventMine implements Listener {
 	@EventHandler
 	public void onDamage(BlockBreakEvent e){
 		Player p = e.getPlayer();
-		if (miningBlocks.contains(e.getBlock().getType())){
-			int percent = WubData.GXP_ROCK.getData(p, main).asInt();
-			if (percent < 100){
-				WubData.GXP_ROCK.setData(p, percent+1, main);
+		if (!p.getGameMode().equals(GameMode.CREATIVE)){
+			if (miningBlocks.contains(e.getBlock().getType())){
+				int percent = WubData.GXP_ROCK.getData(p, main).asInt();
+				if (percent < 100){
+					WubData.GXP_ROCK.setData(p, percent+1, main);
+				}
+				main.updateDisplayBar(p, "&b\u15D1 Mining: " + percent + "%");
+				((SystemRanks) main.getInstance(SystemRanks.class)).checkForRankup(p);
+			} else if (treeBlocks.contains(e.getBlock().getType())){
+				int percent = WubData.GXP_TREE.getData(p, main).asInt();
+				if (percent < 100){
+					WubData.GXP_TREE.setData(p, percent+1, main);
+				}
+				main.updateDisplayBar(p, "&b\u15D1 Logging: " + percent + "%");
+				((SystemRanks) main.getInstance(SystemRanks.class)).checkForRankup(p);
+			} else if (digBlocks.contains(e.getBlock().getType())) {
+				int percent = WubData.GXP_DIG.getData(p, main).asInt();
+				if(percent < 100) {
+					WubData.GXP_DIG.setData(p, percent+1, main);
+				}
+				main.updateDisplayBar(p, "&b\u15D1 Digging: " + percent + "%");
+				((SystemRanks) main.getInstance(SystemRanks.class)).checkForRankup(p);
 			}
-			main.updateDisplayBar(p, "&b\u15D1 Mining: " + percent + "%");
-			((SystemRanks) main.getInstance(SystemRanks.class)).checkForRankup(p);
-		} else if (treeBlocks.contains(e.getBlock().getType())){
-			int percent = WubData.GXP_TREE.getData(p, main).asInt();
-			if (percent < 100){
-				WubData.GXP_TREE.setData(p, percent+1, main);
-			}
-			main.updateDisplayBar(p, "&b\u15D1 Logging: " + percent + "%");
-			((SystemRanks) main.getInstance(SystemRanks.class)).checkForRankup(p);
-		} else if (digBlocks.contains(e.getBlock().getType())) {
-			int percent = WubData.GXP_DIG.getData(p, main).asInt();
-			if(percent < 100) {
-				WubData.GXP_DIG.setData(p, percent+1, main);
-			}
-			main.updateDisplayBar(p, "&b\u15D1 Digging: " + percent + "%");
-			((SystemRanks) main.getInstance(SystemRanks.class)).checkForRankup(p);
 		}
 	}
 }

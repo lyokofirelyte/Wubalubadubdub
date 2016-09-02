@@ -1,19 +1,17 @@
 package com.github.lyokofirelyte.Wubalubadubdub;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import lombok.SneakyThrows;
-import net.minecraft.server.v1_10_R1.IChatBaseComponent;
-import net.minecraft.server.v1_10_R1.IChatBaseComponent.ChatSerializer;
-import net.minecraft.server.v1_10_R1.PacketPlayOutChat;
-import net.minecraft.server.v1_10_R1.PacketPlayOutTitle;
-import net.minecraft.server.v1_10_R1.PacketPlayOutTitle.EnumTitleAction;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -69,6 +67,13 @@ import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 
+import lombok.SneakyThrows;
+import net.minecraft.server.v1_10_R1.IChatBaseComponent;
+import net.minecraft.server.v1_10_R1.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_10_R1.PacketPlayOutChat;
+import net.minecraft.server.v1_10_R1.PacketPlayOutTitle;
+import net.minecraft.server.v1_10_R1.PacketPlayOutTitle.EnumTitleAction;
+
 public class Wub extends JavaPlugin implements Listener {
 	
 	private List<Object> commands = new ArrayList<>();
@@ -82,6 +87,7 @@ public class Wub extends JavaPlugin implements Listener {
 	public Map<String, Object> clazzez = new HashMap<>();
 	public Map<String, WubMarkkitItem> items = new HashMap<>();
 	public Map<String, WubTimer> tasks = new HashMap<>();
+	public PrintWriter pw;
 	
 	public void addTimer(WubTimer task){
 		tasks.put(task.getName(), task);
@@ -419,8 +425,7 @@ public class Wub extends JavaPlugin implements Listener {
 	public void motd(Player p){
 		sendMessage(p, new String[]{
 			"&2Welcome! We're running &bWubalubadubdub v1.0, &2build &f#" + serverObject.get("build"),
-			"&2Type &3/wub &2for a list of commands!",
-			"&a&oNew home every 3rd rank!"
+			"&2Type &3/wub &2for a list of commands!"
 		});
 	}
 	
